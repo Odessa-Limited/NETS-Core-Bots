@@ -1,4 +1,4 @@
-# NETS-Core-Bots
+# NETS-Core-Unity-Bots
 
 ## Using NETS Bots in unity
 ```
