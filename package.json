@@ -1,0 +1,32 @@
+{
+  "name": "com.odessa.nets.core.bots",
+  "displayName": "Odessa NETS Core Bots",
+  "version": "0.0.2",
+  "unity": "2018.1",
+  "description": "Odessa NETS Core is a multiplayer package for unity Networking. This being the Core version is the default base package needed for using NETS.",
+  "keywords": [
+    "multiplayer",
+    "networking",
+    "unity",
+    "tools"
+  ],
+  "dependencies": {
+    "com.odessa.nets.core": "0.0.85"
+  },
+  "homepage": "https://odessaengine.com/",
+  "bugs": {
+    "url": "https://github.com/Odessa-Limited/NETS-Core-Unity-Bots/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Odessa-Limited/NETS-Core-Unity-Bots.git"
+  },
+  "license": "GNU GPL",
+  "author": {
+    "name": "Odessa Limited",
+    "email": "support@odessaengine.com",
+    "url": "https://odessaengine.com"
+  },
+  "category": "Utility",
+  "type": "library"
+}
