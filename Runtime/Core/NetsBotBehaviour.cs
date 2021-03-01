@@ -16,7 +16,6 @@ namespace OdessaEngine.NETS.Core.Bots {
         public override void NetsInitialize() {
             localBotTickOffset = currGlobalBotTickOffset++;
         }
-
         /// <summary>
         /// Logic for each bot happens here. Need to override and have base called for NetsOwnedUpdate
         /// <code>
@@ -58,5 +57,29 @@ namespace OdessaEngine.NETS.Core.Bots {
 				currentBotModule.OnModuleTick(transform);
 			}
 		}
-	}
+    }
+    public class ClosestObject<T> where T : MonoBehaviour {
+        public T controller;
+        public float distance;
+        public ClosestObject(T _controller, float dist) {
+            controller = _controller;
+            distance = dist;
+        }
+        public static ClosestObject<U> GetClosestObject<U>(Transform tocheck, List<U> ListOf = default) where U : MonoBehaviour {
+            var objs = ListOf != default && ListOf.Count() > 0 ? ListOf : UnityEngine.Object.FindObjectsOfType<U>().Where(o => o.GetInstanceID() != tocheck.GetInstanceID()).ToList();
+            var closest = objs.FirstOrDefault();
+            if (closest != default) {
+                var closestDist = Vector3.Distance(tocheck.position, closest.transform.position);
+                foreach (var obj in objs) {
+                    var dist = Vector3.Distance(tocheck.position, obj.transform.position);
+                    if (dist < closestDist) {
+                        closestDist = dist;
+                        closest = obj;
+                    }
+                }
+                return new ClosestObject<U>(closest, closestDist);
+            }
+            return null;
+        }
+    }
 }
