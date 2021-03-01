@@ -65,6 +65,45 @@ namespace OdessaEngine.NETS.Core.Bots {
             controller = _controller;
             distance = dist;
         }
+        /// <summary>
+        /// Distance useful look up and comparison extension of UnityEngine.Object.FindObjectsOfType<typeparamref name="U"/>()
+        /// The below example will give you the closest object to the "Owner" (owner being the bot in question) with CharacterController script attached
+        /// <code>
+        ///     ClosestObject<CharacterController>.GetClosestPlayer(owner.transform)
+        /// </code>
+        /// </summary>
+        /// <remarks>
+        /// See documentation about how to use the system.
+        /// </remarks>
+        /// 
+        /// <example>
+        /// public class ChacterBotDefendModule : NetsBotModule {
+        ///    public override int CalculateUtility(Transform owner) {
+        ///    var ownerCharacterController = owner.GetComponent<CharacterController>();
+        ///    var ownerGoal = UnityEngine.Object.FindObjectsOfType<Goal>().Where(o => o.GetTeam() == ownerCharacterController.teamId).FirstOrDefault();
+        ///    if (ownerGoal) {
+        ///    var closestEnemyToGoalDistance = ClosestObject<CharacterController>.GetClosestObject(ownerGoal.transform, UnityEngine.Object.FindObjectsOfType<CharacterController>().Where(o => o.transform != owner && o.teamId != ownerCharacterController.teamId).ToList()).distance;
+        ///     if (closestEnemyToGoalDistance > 10) return 0;
+        ///         var value = (int)(Mathf.Pow(closestEnemyToGoalDistance, -1f) * 100);
+        ///         return value;
+        ///        }
+        ///        return 0;
+        ///    }
+        ///
+        ///    public override void OnModuleTick(Transform owner) {
+        ///        var ownerCharacterController = owner.GetComponent<CharacterController>();
+        ///        var ownerGoal = UnityEngine.Object.FindObjectsOfType<Goal>().Where(o => o.GetTeam() == ownerCharacterController.teamId).FirstOrDefault();
+        ///        ownerCharacterController.DoLook(ClosestObject<CharacterController>.GetClosestObject<CharacterController>(owner).controller.transform.position);
+        ///        ownerCharacterController.MoveTowards(Vector3.MoveTowards(ownerGoal.transform.position, ownerCharacterController.transform.position, 1));
+        ///        ownerCharacterController.BotFire();
+        ///    }
+        ///}
+        /// </example>
+        /// 
+        /// <code>
+        ///     ClosestObject<CharacterController>.GetClosestPlayer(owner.transform)
+        /// </code>
+        /// 
         public static ClosestObject<U> GetClosestObject<U>(Transform tocheck, List<U> ListOf = default) where U : MonoBehaviour {
             var objs = ListOf != default && ListOf.Count() > 0 ? ListOf : UnityEngine.Object.FindObjectsOfType<U>().Where(o => o.GetInstanceID() != tocheck.GetInstanceID()).ToList();
             var closest = objs.FirstOrDefault();
