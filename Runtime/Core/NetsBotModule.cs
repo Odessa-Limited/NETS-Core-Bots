@@ -5,6 +5,6 @@ using UnityEngine;
 namespace OdessaEngine.NETS.Core.Bots {
 	public abstract class NetsBotModule {
 		public abstract int CalculateUtility(Transform owner);
-		public abstract void OnModuleTick(Transform owner);
+		public abstract bool OnModuleTick(Transform owner);
 	}
 }

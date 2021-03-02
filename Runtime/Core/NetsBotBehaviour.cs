@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace OdessaEngine.NETS.Core.Bots {
 	public abstract class NetsBotBehaviour : NetsBehavior {
-        public Action<string> OnChangeModule;
+
 		List<NetsBotModule> _modules = new List<NetsBotModule>();
 		public abstract List<NetsBotModule> GetNetsBotModules();
 
@@ -46,16 +46,10 @@ namespace OdessaEngine.NETS.Core.Bots {
                 _modules = GetNetsBotModules();
                 _modules = _modules.OrderByDescending(o => o.CalculateUtility(transform)).ToList();
             }
-			var currentBotModule = _modules.FirstOrDefault();
-			if (currentBotModule != default) {
-                if (currentBotModule != lastBotModule) {
-                    if (NetsNetworking.instance.settings.DebugConnections) 
-                        Debug.Log($"NETS Bot - Changing behavior to {currentBotModule.GetType().Name}. With Score {currentBotModule.CalculateUtility(transform)}");
-                    OnChangeModule?.Invoke(currentBotModule.GetType().Name);
-                    lastBotModule = currentBotModule;
-                }
-				currentBotModule.OnModuleTick(transform);
-			}
+
+            foreach (var module in _modules) 
+                if (module.OnModuleTick(transform))
+                    break;
 		}
     }
     public class ClosestObject<T> where T : MonoBehaviour {
@@ -104,8 +98,8 @@ namespace OdessaEngine.NETS.Core.Bots {
         ///     ClosestObject<CharacterController>.GetClosestPlayer(owner.transform)
         /// </code>
         /// 
-        public static ClosestObject<U> GetClosestObject<U>(Transform tocheck, List<U> ListOf = default) where U : MonoBehaviour {
-            var objs = ListOf != default && ListOf.Count() > 0 ? ListOf : UnityEngine.Object.FindObjectsOfType<U>().Where(o => o.GetInstanceID() != tocheck.GetInstanceID()).ToList();
+        public static ClosestObject<T> GetClosestObject(Transform tocheck, List<T> ListOf = default)  {
+            var objs = ListOf != default && ListOf.Count() > 0 ? ListOf : UnityEngine.Object.FindObjectsOfType<T>().Where(o => o.GetInstanceID() != tocheck.GetInstanceID()).ToList();
             var closest = objs.FirstOrDefault();
             if (closest != default) {
                 var closestDist = Vector3.Distance(tocheck.position, closest.transform.position);
@@ -116,7 +110,7 @@ namespace OdessaEngine.NETS.Core.Bots {
                         closest = obj;
                     }
                 }
-                return new ClosestObject<U>(closest, closestDist);
+                return new ClosestObject<T>(closest, closestDist);
             }
             return null;
         }
