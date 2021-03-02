@@ -99,7 +99,7 @@ namespace OdessaEngine.NETS.Core.Bots {
         /// </code>
         /// 
         public static ClosestObject<T> GetClosestObject(Transform tocheck, List<T> ListOf = default)  {
-            var objs = ListOf != default && ListOf.Count() > 0 ? ListOf : UnityEngine.Object.FindObjectsOfType<T>().Where(o => o.GetInstanceID() != tocheck.GetInstanceID()).ToList();
+            var objs = ListOf != default && ListOf.Count() > 0 ? ListOf : UnityEngine.Object.FindObjectsOfType<T>().Where(o => o.transform.GetInstanceID() != tocheck.GetInstanceID()).ToList();
             var closest = objs.FirstOrDefault();
             if (closest != default) {
                 var closestDist = Vector3.Distance(tocheck.position, closest.transform.position);
